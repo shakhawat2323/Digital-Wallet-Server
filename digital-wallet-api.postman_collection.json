@@ -1,0 +1,248 @@
+{
+  "info": {
+    "name": "Digital Wallet API",
+    "_postman_id": "dw-api-full-collection",
+    "description": "Complete Postman Collection for Digital Wallet System (Auth, Wallet, Transaction, Admin)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"Password@123\",\n  \"phone\": \"+8801712345678\",\n  \"address\": \"Dhaka, Bangladesh\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/user/register",
+              "host": ["{{BASE_URL}}"],
+              "path": ["user", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/login",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "My Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{JWT_TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/user/me",
+              "host": ["{{BASE_URL}}"],
+              "path": ["user", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wallet",
+      "item": [
+        {
+          "name": "My Wallet",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{JWT_TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/wallet/me",
+              "host": ["{{BASE_URL}}"],
+              "path": ["wallet", "me"]
+            }
+          }
+        },
+        {
+          "name": "Deposit Money",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{JWT_TOKEN}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": 1000\n}" },
+            "url": {
+              "raw": "{{BASE_URL}}/wallet/deposit",
+              "host": ["{{BASE_URL}}"],
+              "path": ["wallet", "deposit"]
+            }
+          }
+        },
+        {
+          "name": "Withdraw Money",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{JWT_TOKEN}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": 500\n}" },
+            "url": {
+              "raw": "{{BASE_URL}}/wallet/withdraw",
+              "host": ["{{BASE_URL}}"],
+              "path": ["wallet", "withdraw"]
+            }
+          }
+        },
+        {
+          "name": "Toggle Wallet Status (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ADMIN_JWT_TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/wallet/{{WALLET_ID}}/toggle",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "wallet", "{{WALLET_ID}}", "toggle"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transaction",
+      "item": [
+        {
+          "name": "Send Money",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{JWT_TOKEN}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 200,\n  \"toEmail\": \"jane@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/transaction/send",
+              "host": ["{{BASE_URL}}"],
+              "path": ["transaction", "send"]
+            }
+          }
+        },
+        {
+          "name": "My Transaction History",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{JWT_TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/transaction/my-transactions",
+              "host": ["{{BASE_URL}}"],
+              "path": ["transaction", "my-transactions"]
+            }
+          }
+        },
+        {
+          "name": "All Transactions (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ADMIN_JWT_TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/transactions",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "transactions"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ADMIN_JWT_TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/users",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get All Agents",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ADMIN_JWT_TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/agents",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "agents"]
+            }
+          }
+        },
+        {
+          "name": "Toggle Agent Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ADMIN_JWT_TOKEN}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/agent/{{AGENT_ID}}/toggle",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "agent", "{{AGENT_ID}}", "toggle"]
+            }
+          }
+        },
+        {
+          "name": "Set Transaction Fee",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{ADMIN_JWT_TOKEN}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"feePercentage\": 1.5\n}" },
+            "url": {
+              "raw": "{{BASE_URL}}/admin/settings/transaction-fee",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "settings", "transaction-fee"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "BASE_URL", "value": "http://localhost:5000/api/v1" },
+    { "key": "JWT_TOKEN", "value": "" },
+    { "key": "ADMIN_JWT_TOKEN", "value": "" },
+    { "key": "WALLET_ID", "value": "" },
+    { "key": "AGENT_ID", "value": "" }
+  ]
+}

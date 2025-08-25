@@ -1,0 +1,116 @@
+import { Types } from "mongoose";
+
+/** User Roles */
+export enum Role {
+  ADMIN = "ADMIN",
+  USER = "USER",
+  AGENT = "AGENT",
+}
+
+/** Account Status */
+export enum IsActive {
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+  BLOCKED = "BLOCKED",
+}
+
+/** Auth Provider */
+export interface IAuthProvider {
+  provider: "google" | "credentials";
+  providerId: string;
+}
+/** User Schema */
+export interface IUser {
+  _id?: Types.ObjectId;
+  name: string;
+  email: string;
+  password?: string;
+  phone?: string;
+  picture?: string;
+  address?: string;
+  isDeleted?: boolean;
+  isActive?: IsActive;
+  isVerified?: boolean;
+  role: Role;
+  auths: IAuthProvider[];
+  wallets?: Types.ObjectId[];
+}
+
+/** Wallet Types */
+export enum WalletType {
+  PERSONAL = "PERSONAL",
+  BUSINESS = "BUSINESS",
+}
+
+/** Wallet Schema */
+export interface IWallet {
+  _id?: Types.ObjectId;
+  user: Types.ObjectId;
+  balance: number;
+  currency: string; // e.g. "USD", "BDT"
+  type: WalletType;
+  isActive?: boolean;
+}
+
+/** Transaction Types */
+export enum TransactionType {
+  DEPOSIT = "DEPOSIT",
+  WITHDRAW = "WITHDRAW",
+  TRANSFER = "TRANSFER",
+  PAYMENT = "PAYMENT",
+}
+
+/** Transaction Status */
+export enum TransactionStatus {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+  CANCELLED = "CANCELLED",
+}
+
+/** Transaction Schema */
+export interface ITransaction {
+  _id?: Types.ObjectId;
+  wallet: Types.ObjectId;
+  toWallet?: Types.ObjectId; //
+  type: TransactionType;
+  amount: number;
+  currency: string;
+  status: TransactionStatus;
+  reference?: string;
+  description?: string;
+}
+
+/** Payment Method Schema */
+export enum PaymentMethodType {
+  CARD = "CARD",
+  BANK = "BANK",
+  MOBILE_MONEY = "MOBILE_MONEY",
+}
+
+export interface IPaymentMethod {
+  _id?: Types.ObjectId;
+  user: Types.ObjectId;
+  type: PaymentMethodType;
+  provider: string; // e.g. "bKash", "Nagad", "Visa"
+  accountNumber: string;
+  isDefault?: boolean;
+}
+
+/** Notification Schema */
+export interface INotification {
+  _id?: Types.ObjectId;
+  user: Types.ObjectId;
+  title: string;
+  message: string;
+  isRead: boolean;
+}
+
+/** KYC (Know Your Customer) Schema */
+export interface IKYC {
+  _id?: Types.ObjectId;
+  user: Types.ObjectId;
+  nidNumber: string;
+  documentUrl: string;
+  verified: boolean;
+}
