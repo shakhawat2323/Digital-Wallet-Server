@@ -5,35 +5,61 @@ import User from "./user.model";
 import httpStatus from "http-status-codes";
 import bcryptjs from "bcryptjs";
 import { JwtPayload } from "jsonwebtoken";
+import { Wallet } from "../wallet/wallet.model";
+
 const createUser = async (payload: Partial<IUser>) => {
-  const { email, password, ...rest } = payload;
+  const { email, password, role, ...rest } = payload;
 
+  // Check if user already exists
   const isUserExist = await User.findOne({ email });
-
   if (isUserExist) {
     throw new AppError(httpStatus.BAD_REQUEST, "User Already Exist");
   }
 
+  // Hash password
   const hashedPassword = await bcryptjs.hash(
     password as string,
     Number(envVars.BCRYPT_SALT_ROUND)
   );
 
+  // Auth provider info
   const authProvider: IAuthProvider = {
     provider: "credentials",
     providerId: email as string,
   };
-  console.log(authProvider);
 
+  // Create user
   const user = await User.create({
     email,
     password: hashedPassword,
-    // password: password,
+    role: role || "USER",
+    status: "APPROVED",
     auths: [authProvider],
     ...rest,
   });
-  return user;
+
+  const walletType = user.role === Role.AGENT ? "BUSINESS" : "PERSONAL"; // ✅ mapping করলাম
+
+  // Create wallet automatically with initial balance ৳50
+  const wallet = await Wallet.create({
+    user: user._id,
+    balance: 50, // initial balance
+    currency: "BDT",
+    type: walletType,
+    status: "ACTIVE",
+    isActive: true,
+  });
+
+  // Link wallet to user
+  (user.wallets as JwtPayload).push(wallet._id);
+  await user.save();
+
+  // return populated user (with wallet info)
+  const populatedUser = await User.findById(user._id).populate("wallets");
+
+  return populatedUser;
 };
+
 const getAllUsers = async () => {
   const users = await User.find({});
   const totalUsers = await User.countDocuments();
@@ -49,34 +75,43 @@ const updateUser = async (
   payload: Partial<IUser>,
   decodedToken: JwtPayload
 ) => {
-  const ifUserexist = await await User.findById(userId);
-  if (!ifUserexist) {
-    throw new AppError(httpStatus.NOT_FOUND, "User Not Exist");
+  const existingUser = await User.findById(userId);
+  if (!existingUser) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
+
+  // 🔐 Role change validation
   if (payload.role) {
-    if (decodedToken.role === Role.USER || decodedToken.role === Role.AGENT) {
-      throw new AppError(httpStatus.FORBIDDEN, "you are not authorized");
+    // Only ADMIN can assign/change role
+    if (decodedToken.role !== Role.ADMIN) {
+      throw new AppError(
+        httpStatus.FORBIDDEN,
+        "You are not authorized to change roles"
+      );
     }
-    if (payload.role === Role.ADMIN && decodedToken.role === Role.AGENT) {
-      throw new AppError(httpStatus.FORBIDDEN, "you are not authorized");
-    }
-    if (payload.isActive || payload.isDeleted || payload.isVerified) {
-      if (decodedToken.role === Role.USER || decodedToken.role === Role.AGENT) {
-        throw new AppError(httpStatus.FORBIDDEN, "you are not authorized");
-      }
-    }
-    if (payload.password) {
-      payload.password = await bcryptjs.hash(
-        payload.password,
-        envVars.BCRYPT_SALT_ROUND
+    // Prevent non-admin from assigning ADMIN role
+    if (payload.role === Role.ADMIN && decodedToken.role !== Role.ADMIN) {
+      throw new AppError(
+        httpStatus.FORBIDDEN,
+        "Only ADMIN can assign ADMIN role"
       );
     }
   }
-  const newUpdateUser = await User.findByIdAndUpdate(userId, payload, {
+
+  // 🔐 Password hashing
+  if (payload.password) {
+    payload.password = await bcryptjs.hash(
+      payload.password,
+      envVars.BCRYPT_SALT_ROUND
+    );
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(userId, payload, {
     new: true,
     runValidators: true,
   });
-  return newUpdateUser;
+
+  return updatedUser;
 };
 
 export const UserServices = {

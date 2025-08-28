@@ -6,6 +6,10 @@ export enum Role {
   USER = "USER",
   AGENT = "AGENT",
 }
+export enum AgentActive {
+  APPROVED = "APPROVED",
+  SUSPENDED = "SUSPENDED",
+}
 
 /** Account Status */
 export enum IsActive {
@@ -28,28 +32,13 @@ export interface IUser {
   phone?: string;
   picture?: string;
   address?: string;
-  isDeleted?: boolean;
+  // isDeleted?: boolean;
+  status: AgentActive;
   isActive?: IsActive;
-  isVerified?: boolean;
+  // isVerified?: boolean;
   role: Role;
   auths: IAuthProvider[];
   wallets?: Types.ObjectId[];
-}
-
-/** Wallet Types */
-export enum WalletType {
-  PERSONAL = "PERSONAL",
-  BUSINESS = "BUSINESS",
-}
-
-/** Wallet Schema */
-export interface IWallet {
-  _id?: Types.ObjectId;
-  user: Types.ObjectId;
-  balance: number;
-  currency: string; // e.g. "USD", "BDT"
-  type: WalletType;
-  isActive?: boolean;
 }
 
 /** Transaction Types */

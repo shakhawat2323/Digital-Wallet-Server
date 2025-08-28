@@ -45,7 +45,7 @@ export const createUserZodSchema = z.object({
   isDeleted: z.boolean().default(false).optional(),
   isActive: z.enum(Object.values(IsActive) as [string]).default("ACTIVE"),
   isVerified: z.boolean().default(false).optional(),
-
+  role: z.enum(Object.values(Role) as [string]).default(Role.USER),
   wallets: z.array(z.string()).optional(),
   //   auths: z.array(z.object({ provider: z.string(), providerId: z.string() })),
 });
