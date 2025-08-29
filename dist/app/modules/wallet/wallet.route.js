@@ -1,0 +1,35 @@
+"use strict";
+// import { Router } from "express";
+// import { WalletControllers } from "./wallet.controller";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.WalletRoutes = void 0;
+// import { Role } from "../user/user.interface";
+// import { checkAuth } from "../../middlewares/checkAuth";
+// import { validateRequest } from "../../middlewares/validateRequest";
+// import { createWalletSchema } from "./wallet.validation";
+// const router = Router();
+// router.post(
+//   "/cratewallet",
+//   //   validateRequest(createWalletSchema),
+//   checkAuth(Role.USER),
+//   WalletControllers.createWallet
+// );
+// router.get("/me", checkAuth(Role.USER), WalletControllers.getMyWallet);
+// router.post("/deposit", checkAuth(Role.USER), WalletControllers.depositMoney);
+// router.post("/withdraw", checkAuth(Role.USER), WalletControllers.withdrawMoney);
+// export const WalletRoutes = router;
+const express_1 = require("express");
+const wallet_controller_1 = require("./wallet.controller");
+const checkAuth_1 = require("../../middlewares/checkAuth");
+const validateRequest_1 = require("../../middlewares/validateRequest");
+const wallet_validation_1 = require("./wallet.validation");
+const user_interface_1 = require("../user/user.interface");
+const router = (0, express_1.Router)();
+router.post("/create", (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER), (0, validateRequest_1.validateRequest)(wallet_validation_1.createWalletSchema), wallet_controller_1.WalletControllers.createWallet);
+router.get("/me", (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER), //
+wallet_controller_1.WalletControllers.getMyWallet);
+router.post("/add-money", (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER), (0, validateRequest_1.validateRequest)(wallet_validation_1.depositSchema), wallet_controller_1.WalletControllers.depositMoney);
+router.post("/withdraw", (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER), (0, validateRequest_1.validateRequest)(wallet_validation_1.withdrawSchema), wallet_controller_1.WalletControllers.withdrawMoney);
+router.post("/send-money", (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER), wallet_controller_1.WalletControllers.sendMoney);
+router.get("/transactions/me", (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER), wallet_controller_1.WalletControllers.getMyTransactions);
+exports.WalletRoutes = router;

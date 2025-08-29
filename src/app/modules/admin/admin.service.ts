@@ -85,8 +85,6 @@ const getUsers = async () => {
 const getAgents = async () => {
   const agents = await User.find({ role: Role.AGENT });
   const total = await User.countDocuments({ role: Role.AGENT });
-  console.log(agents, "agents");
-  console.log(total, "total");
 
   return {
     data: agents,

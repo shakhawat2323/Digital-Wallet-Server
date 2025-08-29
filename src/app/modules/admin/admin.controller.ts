@@ -22,7 +22,7 @@ const getUsers = catchAsync(
 const getAgents = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const result = await AdminServices.getAgents();
-    console.log(result);
+
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,

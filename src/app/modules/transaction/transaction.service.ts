@@ -11,7 +11,7 @@ const createTransaction = async (
     amount,
     from,
     to,
-    status: "completed",
+    status: "COMPLETED",
   });
   return transaction;
 };

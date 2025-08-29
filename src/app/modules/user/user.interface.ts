@@ -33,7 +33,7 @@ export interface IUser {
   picture?: string;
   address?: string;
   // isDeleted?: boolean;
-  status: AgentActive;
+  status?: AgentActive;
   isActive?: IsActive;
   // isVerified?: boolean;
   role: Role;

@@ -9,7 +9,7 @@ import { sendResponse } from "../../utils/sendResponse";
 // Create Wallet
 const createWallet = catchAsync(async (req: Request, res: Response) => {
   const wallet = await WalletServices.createWallet(req.body);
-  console.log(wallet, "Wallet req.body");
+
   sendResponse(res, {
     statusCode: 201,
     success: true,
@@ -33,7 +33,7 @@ const getMyWallet = catchAsync(async (req: any, res: Response) => {
 const depositMoney = catchAsync(async (req: Request, res: Response) => {
   const { walletId, amount } = req.body;
   const wallet = await WalletServices.depositMoney(walletId, amount);
-  console.log(wallet);
+
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -59,7 +59,7 @@ const withdrawMoney = catchAsync(async (req: Request, res: Response) => {
 const sendMoney = catchAsync(async (req: Request, res: Response) => {
   const { receiverWalletId, amount } = req.body;
   const senderUserId = req.user._id; // from auth middleware
-  console.log(senderUserId, "sender Id");
+
   const transaction = await WalletServices.sendMoney(
     senderUserId,
     receiverWalletId,

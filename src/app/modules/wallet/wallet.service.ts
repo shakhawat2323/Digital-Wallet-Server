@@ -1,14 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AppError from "../../errorHelpers/AppError";
 import { Wallet } from "./wallet.model";
 
 import httpStatus from "http-status-codes";
 import { Transaction } from "../transaction/transaction.model";
 
-// Create wallet for a user
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createWallet = async (payload: any) => {
   const { userId, balance, currency, type, isActive } = payload;
-  console.log(userId, payload);
+
   // check if userId is valid ObjectId
   if (!userId) {
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid userId");
@@ -38,8 +37,7 @@ const createWallet = async (payload: any) => {
 
 const getMyWallet = async (userId: string) => {
   const wallet = await Wallet.findOne({ user: userId });
-  console.log(userId);
-  console.log(wallet, "no wallet");
+
   if (!wallet) {
     throw new AppError(httpStatus.NOT_FOUND, "Wallet not found");
   }
@@ -81,8 +79,6 @@ const sendMoney = async (
 ) => {
   const senderWallet = await Wallet.findOne({ user: senderUserId });
 
-  console.log(senderWallet, "senderWallet");
-
   if (!senderWallet) {
     throw new AppError(httpStatus.NOT_FOUND, "Sender wallet not found");
   }
@@ -91,7 +87,7 @@ const sendMoney = async (
   if (!receiverWallet) {
     throw new AppError(httpStatus.NOT_FOUND, "Receiver wallet not found");
   }
-  console.log(receiverWallet, "recevierwallet");
+
   if (senderWallet.balance < amount) {
     throw new AppError(httpStatus.BAD_REQUEST, "Insufficient balance");
   }
@@ -109,7 +105,7 @@ const sendMoney = async (
     receiverWalletId: receiverWallet._id,
     amount,
     type: "TRANSFER",
-    status: "completed",
+    status: "COMPLETED",
   });
 
   return transaction;
@@ -117,7 +113,7 @@ const sendMoney = async (
 const getMyTransactions = async (userId: string) => {
   // user এর wallet বের করা
   const senderWallet = await Wallet.findOne({ user: userId });
-  console.log(senderWallet, "senderwallet not fund");
+
   if (!senderWallet) {
     throw new AppError(404, "Sender wallet not found");
   }
