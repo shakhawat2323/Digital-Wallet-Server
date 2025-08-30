@@ -11,9 +11,9 @@ export enum Status {
 }
 // Wallet Interface
 export interface IWallet {
-  user: string; // কোন user এর wallet
-  balance: number; // wallet এর টাকা
-  status: "ACTIVE" | "BLOCKED"; // wallet status
+  user: string;
+  balance: number;
+  status: "ACTIVE" | "BLOCKED";
 }
 export enum Currency {
   USD = "USD",
@@ -27,7 +27,7 @@ export interface IWallet {
   _id?: Types.ObjectId;
   user: string;
   balance: number;
-  currency: Currency; // e.g. "USD", "BDT"
+  currency: Currency;
   type: WalletType;
   isActive?: boolean;
 }

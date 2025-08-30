@@ -1,19 +1,3 @@
-// import { z } from "zod";
-// import { Types } from "mongoose";
-// import { Currency, WalletType } from "./wallet.interface";
-
-// // Zod validation schema
-// export const createWalletSchema = z.object({
-//   body: z.object({
-//     user: z.string().refine((val) => Types.ObjectId.isValid(val), {
-//       message: "Invalid user ObjectId",
-//     }),
-//     balance: z.number().min(0, "Balance must be 50").default(50),
-//     currency: z.enum(Object.values(Currency)).default(Currency.BDT),
-//     type: z.enum(Object.values(WalletType) as [string]).default("PERSONAL"),
-//     isActive: z.boolean().default(true),
-//   }),
-// });
 import { z } from "zod";
 import { Types } from "mongoose";
 import { Currency, WalletType } from "./wallet.interface";

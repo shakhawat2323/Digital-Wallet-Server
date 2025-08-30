@@ -53,6 +53,7 @@ const cashOut = async (
   amount: number
 ) => {
   const userWallet = await Wallet.findById(userWalletId);
+
   if (!userWallet) throw new Error("User wallet not found");
 
   if (userWallet.balance < amount) throw new Error("Insufficient balance");
@@ -79,19 +80,19 @@ const cashOut = async (
   return transaction;
 };
 
-const getCommissions = async (agentWalletId: string) => {
-  return Agent.findOne({ wallet: agentWalletId }).select("commissionBalance");
-};
+// const getCommissions = async (agentWalletId: string) => {
+//   return Agent.findOne({ wallet: agentWalletId }).select("commissionBalance");
+// };
 
-const getMyTransactions = async (walletId: string) => {
-  return Transaction.find({
-    $or: [{ senderWalletId: walletId }, { receiverWalletId: walletId }],
-  }).sort({ createdAt: -1 });
-};
+// const getMyTransactions = async (walletId: string) => {
+//   return Transaction.find({
+//     $or: [{ senderWalletId: walletId }, { receiverWalletId: walletId }],
+//   }).sort({ createdAt: -1 });
+// };
 
 export const AgentServices = {
   cashIn,
   cashOut,
-  getCommissions,
-  getMyTransactions,
+  // getCommissions,
+  // getMyTransactions,
 };

@@ -38,9 +38,9 @@ const createUser = async (payload: Partial<IUser>) => {
     ...rest,
   });
 
-  const walletType = user.role === Role.AGENT ? "BUSINESS" : "PERSONAL"; // ✅ mapping করলাম
+  const walletType = user.role === Role.AGENT ? "BUSINESS" : "PERSONAL";
 
-  // Create wallet automatically with initial balance ৳50
+  // Create wallet automatically with initial balance TK50
   const wallet = await Wallet.create({
     user: user._id,
     balance: 50, // initial balance

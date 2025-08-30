@@ -1,24 +1,33 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from "express";
-import { AgentServices } from "./agent.service";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
-const cashIn = async (req: Request, res: Response) => {
-  try {
+import { NextFunction, Request, Response } from "express";
+import { AgentServices } from "./agent.service";
+import { sendResponse } from "../../utils/sendResponse";
+import httpStatus from "http-status-codes";
+import { catchAsync } from "../../utils/catchAsync";
+
+const cashIn = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const { userWalletId, amount } = req.body;
-    const agentWalletId = req.user.wallet; // from auth middleware
+
+    const agentWalletId = req.user.wallet;
+
     const result = await AgentServices.cashIn(
       agentWalletId,
       userWalletId,
       amount
     );
-    res.json({ success: true, data: result });
-  } catch (err: any) {
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
 
-const cashOut = async (req: Request, res: Response) => {
-  try {
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Cash-in Successful",
+      data: result,
+    });
+  }
+);
+const cashOut = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const { userWalletId, amount } = req.body;
     const agentWalletId = req.user.wallet;
     const result = await AgentServices.cashOut(
@@ -26,35 +35,19 @@ const cashOut = async (req: Request, res: Response) => {
       userWalletId,
       amount
     );
-    res.json({ success: true, data: result });
-  } catch (err: any) {
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
 
-const getCommissions = async (req: Request, res: Response) => {
-  try {
-    const agentWalletId = req.user.wallet;
-    const result = await AgentServices.getCommissions(agentWalletId);
-    res.json({ success: true, data: result });
-  } catch (err: any) {
-    res.status(400).json({ success: false, message: err.message });
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Cash-in Successful",
+      data: result,
+    });
   }
-};
-
-const getMyTransactions = async (req: Request, res: Response) => {
-  try {
-    const walletId = req.user.wallet;
-    const result = await AgentServices.getMyTransactions(walletId);
-    res.json({ success: true, data: result });
-  } catch (err: any) {
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
+);
 
 export const AgentControllers = {
   cashIn,
   cashOut,
-  getCommissions,
-  getMyTransactions,
+  // getCommissions,
+  // getMyTransactions,
 };

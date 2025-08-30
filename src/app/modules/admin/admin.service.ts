@@ -1,67 +1,3 @@
-// import User from "../user/user.model";
-// import { Agent } from "../agent/agent.model";
-
-// import { Transaction } from "../transaction/transaction.model";
-// import { Wallet } from "../wallet/wallet.model";
-
-// const getUsers = async () => {
-//   return User.find({});
-// };
-
-// const getAgents = async () => {
-//   return Agent.find({}).populate("user").populate("wallet");
-// };
-
-// const getWallets = async () => {
-//   return Wallet.find({}).populate("owner");
-// };
-
-// const getTransactions = async () => {
-//   return Transaction.find({}).sort({ createdAt: -1 });
-// };
-
-// const blockWallet = async (walletId: string) => {
-//   return Wallet.findByIdAndUpdate(
-//     walletId,
-//     { status: "blocked" },
-//     { new: true }
-//   );
-// };
-
-// const unblockWallet = async (walletId: string) => {
-//   return Wallet.findByIdAndUpdate(
-//     walletId,
-//     { status: "active" },
-//     { new: true }
-//   );
-// };
-
-// const approveAgent = async (agentId: string) => {
-//   return User.findByIdAndUpdate(
-//     agentId,
-//     { approvalStatus: "approved" },
-//     { new: true }
-//   );
-// };
-
-// const suspendAgent = async (agentId: string) => {
-//   return User.findByIdAndUpdate(
-//     agentId,
-//     { approvalStatus: "suspended" },
-//     { new: true }
-//   );
-// };
-
-// export const AdminServices = {
-//   getUsers,
-//   getAgents,
-//   getWallets,
-//   getTransactions,
-//   blockWallet,
-//   unblockWallet,
-//   approveAgent,
-//   suspendAgent,
-// };
 import httpStatus from "http-status-codes";
 import AppError from "../../errorHelpers/AppError";
 
@@ -71,7 +7,7 @@ import { Transaction } from "../transaction/transaction.model";
 import { Wallet } from "../wallet/wallet.model";
 import { AgentActive, IsActive, Role } from "../user/user.interface";
 
-// ✅ Get all users
+//  Get all users
 const getUsers = async () => {
   const users = await User.find({});
   const total = await User.countDocuments();
@@ -81,7 +17,7 @@ const getUsers = async () => {
   };
 };
 
-// ✅ Get all agents (with user + wallet populated)
+//  Get all agents (with user + wallet populated)
 const getAgents = async () => {
   const agents = await User.find({ role: Role.AGENT });
   const total = await User.countDocuments({ role: Role.AGENT });
@@ -92,7 +28,7 @@ const getAgents = async () => {
   };
 };
 
-// ✅ Get all wallets
+//  Get all wallets
 const getWallets = async () => {
   const wallets = await Wallet.find({});
   const total = await Wallet.countDocuments();
@@ -102,7 +38,7 @@ const getWallets = async () => {
   };
 };
 
-// ✅ Get all transactions (sorted by latest first)
+//  Get all transactions (sorted by latest first)
 const getTransactions = async () => {
   const transactions = await Transaction.find({}).sort({ createdAt: -1 });
   const total = await Transaction.countDocuments();
@@ -112,7 +48,7 @@ const getTransactions = async () => {
   };
 };
 
-// ✅ Block wallet
+//  Block wallet
 const blockWallet = async (walletId: string) => {
   const wallet = await Wallet.findById(walletId);
   if (!wallet) {
@@ -124,7 +60,7 @@ const blockWallet = async (walletId: string) => {
   return wallet;
 };
 
-// ✅ Unblock wallet
+//  Unblock wallet
 const unblockWallet = async (walletId: string) => {
   const wallet = await Wallet.findById(walletId);
   if (!wallet) {

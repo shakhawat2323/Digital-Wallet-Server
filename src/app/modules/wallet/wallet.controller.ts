@@ -3,8 +3,6 @@ import { Request, Response } from "express";
 import { WalletServices } from "./wallet.service";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
-// import AppError from "../../errorHelpers/AppError";
-// import httpStatus from "http-status-codes";
 
 // Create Wallet
 const createWallet = catchAsync(async (req: Request, res: Response) => {
@@ -58,7 +56,7 @@ const withdrawMoney = catchAsync(async (req: Request, res: Response) => {
 
 const sendMoney = catchAsync(async (req: Request, res: Response) => {
   const { receiverWalletId, amount } = req.body;
-  const senderUserId = req.user._id; // from auth middleware
+  const senderUserId = req.user._id;
 
   const transaction = await WalletServices.sendMoney(
     senderUserId,
@@ -67,7 +65,7 @@ const sendMoney = catchAsync(async (req: Request, res: Response) => {
   );
 
   sendResponse(res, {
-    statusCode: 200, // <-- এটা দিতে হবে
+    statusCode: 200,
     success: true,
     message: "Money sent successfully",
     data: {
@@ -82,7 +80,7 @@ const sendMoney = catchAsync(async (req: Request, res: Response) => {
 // Get My Transactions
 export const getMyTransactions = catchAsync(
   async (req: Request, res: Response) => {
-    const userId = req.user._id; // from checkAuth middleware
+    const userId = req.user._id;
 
     const transactions = await WalletServices.getMyTransactions(userId);
 

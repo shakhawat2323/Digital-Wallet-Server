@@ -81,7 +81,7 @@ export interface IPaymentMethod {
   _id?: Types.ObjectId;
   user: Types.ObjectId;
   type: PaymentMethodType;
-  provider: string; // e.g. "bKash", "Nagad", "Visa"
+  provider: string;
   accountNumber: string;
   isDefault?: boolean;
 }
