@@ -12,28 +12,6 @@ const env_1 = require("../../config/env");
 const AppError_1 = __importDefault(require("../../errorHelpers/AppError"));
 const user_model_1 = __importDefault(require("../user/user.model"));
 const userToken_1 = require("../../utils/userToken");
-// const credentialsLogin = async (payload: Partial<IUser>) => {
-//   const { email, password } = payload;
-//   const isUserExist = await User.findOne({ email });
-//   if (!isUserExist) {
-//     throw new AppError(httpStatus.BAD_REQUEST, "Email does not exist");
-//   }
-//   const isPasswordMatched = await bcryptjs.compare(
-//     password as string,
-//     isUserExist.password as string
-//   );
-//   if (!isPasswordMatched) {
-//     throw new AppError(httpStatus.BAD_REQUEST, "Incorrect Password");
-//   }
-//   const userToken = createUserTokens(isUserExist);
-//   // delete isUserExist.password;
-//   const { password: pass, ...rest } = isUserExist.toObject();
-//   return {
-//     accessToken: userToken.accessToken,
-//     refreshToken: userToken.refreshToken,
-//     user: rest,
-//   };
-// };
 const credentialsLogin = async (Payload) => {
     const { email, password } = Payload;
     const isUserExist = await user_model_1.default.findOne({ email });

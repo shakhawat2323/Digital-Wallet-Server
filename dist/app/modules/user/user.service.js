@@ -34,8 +34,8 @@ const createUser = async (payload) => {
         auths: [authProvider],
         ...rest,
     });
-    const walletType = user.role === user_interface_1.Role.AGENT ? "BUSINESS" : "PERSONAL"; // ✅ mapping করলাম
-    // Create wallet automatically with initial balance ৳50
+    const walletType = user.role === user_interface_1.Role.AGENT ? "BUSINESS" : "PERSONAL";
+    // Create wallet automatically with initial balance TK50
     const wallet = await wallet_model_1.Wallet.create({
         user: user._id,
         balance: 50, // initial balance

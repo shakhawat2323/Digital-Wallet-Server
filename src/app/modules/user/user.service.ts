@@ -70,6 +70,7 @@ const getAllUsers = async () => {
     },
   };
 };
+
 const updateUser = async (
   userId: string,
   payload: Partial<IUser>,
@@ -80,25 +81,42 @@ const updateUser = async (
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
 
-  // 🔐 Role change validation
+  //  Role change validation
   if (payload.role) {
-    // Only ADMIN can assign/change role
     if (decodedToken.role !== Role.ADMIN) {
       throw new AppError(
         httpStatus.FORBIDDEN,
         "You are not authorized to change roles"
       );
     }
-    // Prevent non-admin from assigning ADMIN role
+
     if (payload.role === Role.ADMIN && decodedToken.role !== Role.ADMIN) {
       throw new AppError(
         httpStatus.FORBIDDEN,
         "Only ADMIN can assign ADMIN role"
       );
     }
+
+    //  If role changed to AGENT, update wallet type to BUSINESS
+    if (payload.role === Role.AGENT) {
+      await Wallet.findOneAndUpdate(
+        { user: userId },
+        { type: "BUSINESS" },
+        { new: true }
+      );
+    }
+
+    //  If role changed to USER, update wallet type to PERSONAL
+    if (payload.role === Role.USER) {
+      await Wallet.findOneAndUpdate(
+        { user: userId },
+        { type: "PERSONAL" },
+        { new: true }
+      );
+    }
   }
 
-  // 🔐 Password hashing
+  //  Password hashing
   if (payload.password) {
     payload.password = await bcryptjs.hash(
       payload.password,

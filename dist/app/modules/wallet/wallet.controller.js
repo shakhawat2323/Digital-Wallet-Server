@@ -4,8 +4,6 @@ exports.WalletControllers = exports.getMyTransactions = void 0;
 const wallet_service_1 = require("./wallet.service");
 const catchAsync_1 = require("../../utils/catchAsync");
 const sendResponse_1 = require("../../utils/sendResponse");
-// import AppError from "../../errorHelpers/AppError";
-// import httpStatus from "http-status-codes";
 // Create Wallet
 const createWallet = (0, catchAsync_1.catchAsync)(async (req, res) => {
     const wallet = await wallet_service_1.WalletServices.createWallet(req.body);
@@ -51,10 +49,10 @@ const withdrawMoney = (0, catchAsync_1.catchAsync)(async (req, res) => {
 // Send Money
 const sendMoney = (0, catchAsync_1.catchAsync)(async (req, res) => {
     const { receiverWalletId, amount } = req.body;
-    const senderUserId = req.user._id; // from auth middleware
+    const senderUserId = req.user._id;
     const transaction = await wallet_service_1.WalletServices.sendMoney(senderUserId, receiverWalletId, amount);
     (0, sendResponse_1.sendResponse)(res, {
-        statusCode: 200, // <-- এটা দিতে হবে
+        statusCode: 200,
         success: true,
         message: "Money sent successfully",
         data: {
@@ -67,7 +65,7 @@ const sendMoney = (0, catchAsync_1.catchAsync)(async (req, res) => {
 });
 // Get My Transactions
 exports.getMyTransactions = (0, catchAsync_1.catchAsync)(async (req, res) => {
-    const userId = req.user._id; // from checkAuth middleware
+    const userId = req.user._id;
     const transactions = await wallet_service_1.WalletServices.getMyTransactions(userId);
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: 200,

@@ -58,17 +58,17 @@ const cashOut = async (agentWalletId, userWalletId, amount) => {
     });
     return transaction;
 };
-const getCommissions = async (agentWalletId) => {
-    return agent_model_1.Agent.findOne({ wallet: agentWalletId }).select("commissionBalance");
-};
-const getMyTransactions = async (walletId) => {
-    return transaction_model_1.Transaction.find({
-        $or: [{ senderWalletId: walletId }, { receiverWalletId: walletId }],
-    }).sort({ createdAt: -1 });
-};
+// const getCommissions = async (agentWalletId: string) => {
+//   return Agent.findOne({ wallet: agentWalletId }).select("commissionBalance");
+// };
+// const getMyTransactions = async (walletId: string) => {
+//   return Transaction.find({
+//     $or: [{ senderWalletId: walletId }, { receiverWalletId: walletId }],
+//   }).sort({ createdAt: -1 });
+// };
 exports.AgentServices = {
     cashIn,
     cashOut,
-    getCommissions,
-    getMyTransactions,
+    // getCommissions,
+    // getMyTransactions,
 };

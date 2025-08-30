@@ -1,6 +1,4 @@
 "use strict";
-// /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { NextFunction, Request, Response } from "express";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -32,7 +30,6 @@ const checkAuth = (...authRoles) => async (req, res, next) => {
         if (!authRoles.includes(decoded.role)) {
             throw new AppError_1.default(403, `You are not authorized as ${decoded.role}`);
         }
-        // ✅ এখন wallet থেকে চেক করি user এর কোনো BLOCKED wallet আছে কিনা
         const blockedWallet = await wallet_model_1.Wallet.findOne({
             user: isUserExist._id,
             status: "BLOCKED",
@@ -40,11 +37,18 @@ const checkAuth = (...authRoles) => async (req, res, next) => {
         if (blockedWallet) {
             throw new AppError_1.default(http_status_codes_1.default.FORBIDDEN, "Your wallet is BLOCKED, no transactions allowed");
         }
+        let walletId;
+        if (decoded.role === "AGENT" || decoded.role === "USER") {
+            if (!isUserExist.wallets || isUserExist.wallets.length === 0) {
+                throw new Error("User has no wallet");
+            }
+            walletId = isUserExist.wallets[0]._id;
+        }
         req.user = {
-            _id: decoded._id,
+            _id: isUserExist._id,
             email: decoded.email,
             role: decoded.role,
-            wallet: isUserExist._id, // ধরলাম প্রথম ওয়ালেট
+            wallet: walletId,
         };
         next();
     }

@@ -1,70 +1,16 @@
 "use strict";
-// import User from "../user/user.model";
-// import { Agent } from "../agent/agent.model";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminServices = void 0;
-// import { Transaction } from "../transaction/transaction.model";
-// import { Wallet } from "../wallet/wallet.model";
-// const getUsers = async () => {
-//   return User.find({});
-// };
-// const getAgents = async () => {
-//   return Agent.find({}).populate("user").populate("wallet");
-// };
-// const getWallets = async () => {
-//   return Wallet.find({}).populate("owner");
-// };
-// const getTransactions = async () => {
-//   return Transaction.find({}).sort({ createdAt: -1 });
-// };
-// const blockWallet = async (walletId: string) => {
-//   return Wallet.findByIdAndUpdate(
-//     walletId,
-//     { status: "blocked" },
-//     { new: true }
-//   );
-// };
-// const unblockWallet = async (walletId: string) => {
-//   return Wallet.findByIdAndUpdate(
-//     walletId,
-//     { status: "active" },
-//     { new: true }
-//   );
-// };
-// const approveAgent = async (agentId: string) => {
-//   return User.findByIdAndUpdate(
-//     agentId,
-//     { approvalStatus: "approved" },
-//     { new: true }
-//   );
-// };
-// const suspendAgent = async (agentId: string) => {
-//   return User.findByIdAndUpdate(
-//     agentId,
-//     { approvalStatus: "suspended" },
-//     { new: true }
-//   );
-// };
-// export const AdminServices = {
-//   getUsers,
-//   getAgents,
-//   getWallets,
-//   getTransactions,
-//   blockWallet,
-//   unblockWallet,
-//   approveAgent,
-//   suspendAgent,
-// };
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const AppError_1 = __importDefault(require("../../errorHelpers/AppError"));
 const user_model_1 = __importDefault(require("../user/user.model"));
 const transaction_model_1 = require("../transaction/transaction.model");
 const wallet_model_1 = require("../wallet/wallet.model");
 const user_interface_1 = require("../user/user.interface");
-// ✅ Get all users
+//  Get all users
 const getUsers = async () => {
     const users = await user_model_1.default.find({});
     const total = await user_model_1.default.countDocuments();
@@ -73,7 +19,7 @@ const getUsers = async () => {
         meta: { total },
     };
 };
-// ✅ Get all agents (with user + wallet populated)
+//  Get all agents (with user + wallet populated)
 const getAgents = async () => {
     const agents = await user_model_1.default.find({ role: user_interface_1.Role.AGENT });
     const total = await user_model_1.default.countDocuments({ role: user_interface_1.Role.AGENT });
@@ -82,7 +28,7 @@ const getAgents = async () => {
         meta: { total },
     };
 };
-// ✅ Get all wallets
+//  Get all wallets
 const getWallets = async () => {
     const wallets = await wallet_model_1.Wallet.find({});
     const total = await wallet_model_1.Wallet.countDocuments();
@@ -91,7 +37,7 @@ const getWallets = async () => {
         meta: { total },
     };
 };
-// ✅ Get all transactions (sorted by latest first)
+//  Get all transactions (sorted by latest first)
 const getTransactions = async () => {
     const transactions = await transaction_model_1.Transaction.find({}).sort({ createdAt: -1 });
     const total = await transaction_model_1.Transaction.countDocuments();
@@ -100,7 +46,7 @@ const getTransactions = async () => {
         meta: { total },
     };
 };
-// ✅ Block wallet
+//  Block wallet
 const blockWallet = async (walletId) => {
     const wallet = await wallet_model_1.Wallet.findById(walletId);
     if (!wallet) {
@@ -111,7 +57,7 @@ const blockWallet = async (walletId) => {
     await wallet.save();
     return wallet;
 };
-// ✅ Unblock wallet
+//  Unblock wallet
 const unblockWallet = async (walletId) => {
     const wallet = await wallet_model_1.Wallet.findById(walletId);
     if (!wallet) {

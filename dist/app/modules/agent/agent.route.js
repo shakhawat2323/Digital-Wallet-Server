@@ -8,6 +8,14 @@ const user_interface_1 = require("../user/user.interface");
 const router = (0, express_1.Router)();
 router.post("/cash-in", (0, checkAuth_1.checkAuth)(user_interface_1.Role.AGENT), agent_controller_1.AgentControllers.cashIn);
 router.post("/cash-out", (0, checkAuth_1.checkAuth)(user_interface_1.Role.AGENT), agent_controller_1.AgentControllers.cashOut);
-router.get("/commissions", (0, checkAuth_1.checkAuth)(user_interface_1.Role.AGENT), agent_controller_1.AgentControllers.getCommissions);
-router.get("/transactions/me", (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER, user_interface_1.Role.AGENT), agent_controller_1.AgentControllers.getMyTransactions);
+// router.get(
+//   "/commissions",
+//   checkAuth(Role.AGENT),
+//   AgentControllers.getCommissions
+// );
+// router.get(
+//   "/transactions/me",
+//   checkAuth(Role.USER, Role.AGENT),
+//   AgentControllers.getMyTransactions
+// );
 exports.AgentRoutes = router;

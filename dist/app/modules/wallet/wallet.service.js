@@ -94,7 +94,6 @@ const getMyTransactions = async (userId) => {
     if (!senderWallet) {
         throw new AppError_1.default(404, "Sender wallet not found");
     }
-    // senderWalletId দিয়ে transaction খোঁজা
     const transactions = await transaction_model_1.Transaction.find({
         senderWalletId: senderWallet._id,
     })
