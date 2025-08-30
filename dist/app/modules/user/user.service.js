@@ -66,18 +66,24 @@ const updateUser = async (userId, payload, decodedToken) => {
     if (!existingUser) {
         throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, "User not found");
     }
-    // 🔐 Role change validation
+    //  Role change validation
     if (payload.role) {
-        // Only ADMIN can assign/change role
         if (decodedToken.role !== user_interface_1.Role.ADMIN) {
             throw new AppError_1.default(http_status_codes_1.default.FORBIDDEN, "You are not authorized to change roles");
         }
-        // Prevent non-admin from assigning ADMIN role
         if (payload.role === user_interface_1.Role.ADMIN && decodedToken.role !== user_interface_1.Role.ADMIN) {
             throw new AppError_1.default(http_status_codes_1.default.FORBIDDEN, "Only ADMIN can assign ADMIN role");
         }
+        //  If role changed to AGENT, update wallet type to BUSINESS
+        if (payload.role === user_interface_1.Role.AGENT) {
+            await wallet_model_1.Wallet.findOneAndUpdate({ user: userId }, { type: "BUSINESS" }, { new: true });
+        }
+        //  If role changed to USER, update wallet type to PERSONAL
+        if (payload.role === user_interface_1.Role.USER) {
+            await wallet_model_1.Wallet.findOneAndUpdate({ user: userId }, { type: "PERSONAL" }, { new: true });
+        }
     }
-    // 🔐 Password hashing
+    //  Password hashing
     if (payload.password) {
         payload.password = await bcryptjs_1.default.hash(payload.password, env_1.envVars.BCRYPT_SALT_ROUND);
     }
