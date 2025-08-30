@@ -63,11 +63,13 @@ A secure, modular, and role-based backend API for a **Digital Wallet System** (s
 ---
 
 ### 👛 Wallet
-
-| Method | Endpoint              | Description    |
-| ------ | --------------------- | -------------- |
-| PATCH  | `/wallet/block/:id`   | Block wallet   |
-| PATCH  | `/wallet/unblock/:id` | Unblock wallet |
+| Method | Endpoint               | Description      |
+|--------|-------------------------|------------------|
+| GET    | `/wallet/my-wallet`     | Get my wallet    |
+| POST   | `/wallet/add-money`     | Add money        |
+| POST   | `/wallet/withdraw`      | Withdraw money   |
+| POST   | `/wallet/send-money`    | Send money       |
+| GET    | `/wallet/transactions`  | Get transactions |
 
 ---
 
